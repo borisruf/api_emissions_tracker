@@ -2,6 +2,7 @@ from mockai import MockAzureOpenAI
 from openai import AzureOpenAI
 import json
 import warnings
+import os
 
 class APIEmissionsTracker:
     def __init__(self):
@@ -28,7 +29,8 @@ class APIEmissionsTracker:
         print(f"Compare: https://borisruf.github.io/carbon-footprint-modeling-tool/search.html?value={self.emissions}&mass_unit=g&emission_type=co2e")
 
     def approximate_emissions(model, prompt_tokens, completion_tokens):
-        with open("emission_factors.json", "r") as file:
+        path = os.path.join(os.path.dirname(__file__), 'emission_factors.json')
+        with open(path, "r") as file:
             emission_factors = json.load(file)
 
             if model in emission_factors:
