@@ -1,0 +1,12 @@
+{
+  "gpt-35-turbo": {
+    "per_completion_token": 0.00246,
+    "per_prompt_token": 0.00246,
+    "reference_url": "https://borisruf.github.io/carbon-footprint-modeling-tool/index.html?id=gpt-ruf-mortas-token&emission_type=co2e"
+  },
+  "gpt-4": {
+    "per_completion_token": 0.3517,
+    "per_prompt_token": 0.3517,
+    "reference_url": "https://borisruf.github.io/carbon-footprint-modeling-tool/show.html?id=gpt4-ruf-mortas-2&emission_type=co2e"
+  }
+}
