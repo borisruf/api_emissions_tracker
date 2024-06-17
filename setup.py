@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 setup(
     name='api_emissions_tracker',
     packages=find_packages(),
-    package_data={'emissions_tracker': ['emission_factors.json']},
+    package_data={'api_emissions_tracker': ['emission_factors.json']},
     install_requires=['openai', 'mockai@git+https://github.com/borisruf/mockai'],
     version='0.1.0',
     description='Estimates emissions linked to AI cloud services.',
