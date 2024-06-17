@@ -1,4 +1,4 @@
-# EmissionsTracker
+# APIEmissionsTracker
 A Python library that estimates the carbon emissions linked to cloud-based API services, such as AI cloud services, for demonstration purposes.
 
 ## Installation
@@ -14,13 +14,12 @@ pip install git+https://github.com/borisruf/emissions_tracker.git
 Once the package is installed, you can include and use it in your Python code as follows:
 
 ```python
-import os
 from mockai import MockAzureOpenAI
 from emissions_tracker import APIEmissionsTracker
 
-AZURE_ENDPOINT = os.getenv("AZURE_ENDPOINT")
-OPENAI_MODEL = os.getenv("OPENAI_MODEL")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+AZURE_ENDPOINT = "[YOUR_AZURE_ENDPOINT]"
+OPENAI_MODEL = "[YOUR_OPENAI_MODEL]"
+OPENAI_API_KEY = "[YOUR_OPENAI_API_KEY]"
 
 tracker = APIEmissionsTracker()
 tracker.start()
