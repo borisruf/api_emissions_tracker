@@ -6,7 +6,7 @@ A Python library that estimates the carbon emissions linked to cloud-based API s
 To install the package, you can use `pip`, the Python package manager. Open a command line or terminal and run the following command:
 
 ```bash
-pip install git+https://github.com/borisruf/emissions_tracker.git
+pip install git+https://github.com/borisruf/api_emissions_tracker.git
 ```
 
 ## Usage
@@ -15,7 +15,7 @@ Once the package is installed, you can include and use it in your Python code as
 
 ```python
 from mockai import MockAzureOpenAI
-from emissions_tracker import APIEmissionsTracker
+from api_emissions_tracker import APIEmissionsTracker
 
 AZURE_ENDPOINT = "[YOUR_AZURE_ENDPOINT]"
 OPENAI_MODEL = "[YOUR_OPENAI_MODEL]"
