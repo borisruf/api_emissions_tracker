@@ -1,1 +1,1 @@
-from . import APIEmissionsTracker
+from .api_emissions_tracker import APIEmissionsTracker
