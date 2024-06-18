@@ -41,3 +41,8 @@ emissions: 0.26814 g CO2e
 ```
 
 Please note that this sample code uses the Python library [MockAI](https://github.com/borisruf/mockai/) to mimic the API requests for demonstration purposes. Currently, the supported models include `gpt-35-turbo` and `gpt-4`. The emission factors can be checked, changed and extended in [emission_factors.json](https://github.com/borisruf/mockai/blob/main/emissions_tracker/emission_factors.json).
+
+
+## Tutorials
+- [Jupyter notebook](https://github.com/borisruf/api_emissions_tracker/blob/main/notebooks/RemoteCodeEmissions.ipynb) for estimating carbon emissions of __remotely__ executed code [![Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/borisruf/remotecodeemissions)
+- [Jupyter notebook](https://github.com/borisruf/api_emissions_tracker/blob/main/notebooks/LocalCodeEmissions.ipynb) for estimating carbon emissions of __locally__ executed code [![Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/borisruf/localcodeemissions)
