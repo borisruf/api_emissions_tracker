@@ -15,7 +15,7 @@ Once the package is installed, you can include and use it in your Python code.
 
 __Sample code:__
 ```python
-from mockai import MockAzureOpenAI
+from mockai import AzureOpenAI
 from api_emissions_tracker import APIEmissionsTracker
 
 AZURE_ENDPOINT = "[YOUR_AZURE_ENDPOINT]"
@@ -25,7 +25,7 @@ OPENAI_API_KEY = "[YOUR_OPENAI_API_KEY]"
 tracker = APIEmissionsTracker()
 tracker.start()
 
-client = MockAzureOpenAI(azure_endpoint=AZURE_ENDPOINT, api_key=OPENAI_API_KEY)
+client = AzureOpenAI(azure_endpoint=AZURE_ENDPOINT, api_key=OPENAI_API_KEY)
 
 response = client.chat.completions.create(model=OPENAI_MODEL, messages=[{"role": "system", "content": "What is the origin of the Olympic Games?"}])
 
@@ -40,7 +40,15 @@ __Sample output:__
 emissions: 0.26814 g CO2e
 ```
 
-Please note that this sample code uses the Python library [MockAI](https://github.com/borisruf/mockai/) to mimic the API requests for demonstration purposes. Currently, the supported models include `gpt-35-turbo` and `gpt-4`. The emission factors can be checked, changed and extended in [emission_factors.json](https://github.com/borisruf/mockai/blob/main/emissions_tracker/emission_factors.json).
+For simulation purposes you can also uses the Python library [MockAI](https://github.com/borisruf/mockai/) to mimic the API requests for demonstration purposes. Simply replace the following lines:
+
+```python
+from mockai import MockAzureOpenAI
+...
+client = MockAzureOpenAI(azure_endpoint=AZURE_ENDPOINT, api_key=OPENAI_API_KEY)
+```
+
+The emission factors can be checked, changed and extended in [emission_factors.json](https://github.com/borisruf/mockai/blob/main/emissions_tracker/emission_factors.json).
 
 
 ## Tutorials
