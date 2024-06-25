@@ -1,5 +1,7 @@
+from wrapt import wrap_function_wrapper
 from mockai import MockAzureOpenAI
 from openai import AzureOpenAI
+from openai.resources.chat import Completions
 import json
 import warnings
 import os
@@ -70,9 +72,6 @@ MockAzureOpenAI.chat.completions.create = _new_create_mock_azure_open_ai
 
 
 ############ AzureOpenAI
-
-from wrapt import wrap_function_wrapper
-from openai.resources.chat import Completions
 
 def azure_openai_chat_wrapper(
     wrapped,
