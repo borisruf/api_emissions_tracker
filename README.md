@@ -40,7 +40,7 @@ __Sample output:__
 emissions: 0.26814 g CO2e
 ```
 
-For simulation purposes you can also uses the Python library [MockAI](https://github.com/borisruf/mockai/) to mimic the API requests for demonstration purposes. Simply replace the following lines:
+For demonstration purposes you can also uses the Python library [MockAI](https://github.com/borisruf/mockai/) which mimics the API requests. Simply replace the following lines:
 
 ```python
 from mockai import MockAzureOpenAI
