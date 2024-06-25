@@ -39,6 +39,7 @@ class APIEmissionsTracker:
                 warnings.warn(f"No emission data available for the AI model '{model}'")
                 return 0
 
+############ MockAI
 
 def _new_create_mock_azure_open_ai(model, messages, temperature=1, max_tokens=16, top_p=1, frequency_penalty=0, presence_penalty=0, stop=None):
     
@@ -66,3 +67,53 @@ MockAzureOpenAI.chat._original_create = MockAzureOpenAI.chat.completions.create
 
 # Monkey patch the method of the MockAzureOpenAI class
 MockAzureOpenAI.chat.completions.create = _new_create_mock_azure_open_ai
+
+
+############ AzureOpenAI
+
+from wrapt import wrap_function_wrapper
+from openai.resources.chat import Completions
+
+def azure_openai_chat_wrapper(
+    wrapped,
+    instance: Completions,
+    args,
+    kwargs
+):
+    response = wrapped(*args, **kwargs)
+    # Add code to run after the create method of OpenAI was executed
+    if response:
+        # Collect meta data
+        model = response.model
+        prompt_tokens = response.usage.prompt_tokens
+        completion_tokens = response.usage.completion_tokens
+
+        # Calculate emissions
+        amount = APIEmissionsTracker.approximate_emissions(model, prompt_tokens, completion_tokens)
+        MockAzureOpenAI.tracker.add_emissions(amount)
+
+        return response
+
+    else:
+        return None
+
+class AzureOpenAIInstrumentor:
+    def __init__(self):
+        self.wrapped_methods = [
+            {
+                "module": "openai.resources.chat.completions",
+                "name": "Completions.create",
+                "wrapper": azure_openai_chat_wrapper,
+            },
+        ]
+
+    def instrument(self):
+        for wrapper in self.wrapped_methods:
+            wrap_function_wrapper(
+                wrapper["module"], wrapper["name"], wrapper["wrapper"]
+            )
+
+
+# instantiating the instrumentor
+instrumentor = AzureOpenAIInstrumentor()
+instrumentor.instrument()
