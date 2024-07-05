@@ -48,4 +48,4 @@ from stub_ai import StubAzureOpenAI
 client = StubAzureOpenAI(azure_endpoint=AZURE_ENDPOINT, api_key=OPENAI_API_KEY)
 ```
 
-The emission factors can be checked, changed and extended in [emission_factors.json](https://github.com/borisruf/mockai/blob/main/emissions_tracker/emission_factors.json).
+The emission factors can be checked, changed and extended in [emission_factors.json](https://github.com/borisruf/api_emissions_tracker/blob/main/api_emissions_tracker/emission_factors.json).

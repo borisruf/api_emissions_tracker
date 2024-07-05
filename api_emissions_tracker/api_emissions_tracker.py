@@ -1,5 +1,5 @@
 from wrapt import wrap_function_wrapper
-from mockai import MockAzureOpenAI
+from stub_ai import StubAzureOpenAI
 from openai import AzureOpenAI
 from openai.resources.chat import Completions
 import json
@@ -8,7 +8,7 @@ import os
 
 class APIEmissionsTracker:
     def __init__(self):
-        MockAzureOpenAI.tracker = self
+        StubAzureOpenAI.tracker = self
         self.emissions = 0.0
 
     def start(self):
@@ -41,12 +41,12 @@ class APIEmissionsTracker:
                 warnings.warn(f"No emission data available for the AI model '{model}'")
                 return 0
 
-############ MockAI
+############ Stub AI
 
-def _new_create_mock_azure_open_ai(model, messages, temperature=1, max_tokens=16, top_p=1, frequency_penalty=0, presence_penalty=0, stop=None):
+def _new_create_stub_azure_open_ai(model, messages, temperature=1, max_tokens=16, top_p=1, frequency_penalty=0, presence_penalty=0, stop=None):
     
     # Call the original method to keep the old code
-    response = MockAzureOpenAI.chat._original_create(model, messages, temperature, max_tokens, top_p, frequency_penalty, presence_penalty, stop)
+    response = StubAzureOpenAI.chat._original_create(model, messages, temperature, max_tokens, top_p, frequency_penalty, presence_penalty, stop)
     
     if response:
         # Collect meta data
@@ -56,7 +56,7 @@ def _new_create_mock_azure_open_ai(model, messages, temperature=1, max_tokens=16
 
         # Calculate emissions
         amount = APIEmissionsTracker.approximate_emissions(model, prompt_tokens, completion_tokens)
-        MockAzureOpenAI.tracker.add_emissions(amount)
+        StubAzureOpenAI.tracker.add_emissions(amount)
 
         return response
 
@@ -65,10 +65,10 @@ def _new_create_mock_azure_open_ai(model, messages, temperature=1, max_tokens=16
 
 
 # Store the original method
-MockAzureOpenAI.chat._original_create = MockAzureOpenAI.chat.completions.create
+StubAzureOpenAI.chat._original_create = StubAzureOpenAI.chat.completions.create
 
-# Monkey patch the method of the MockAzureOpenAI class
-MockAzureOpenAI.chat.completions.create = _new_create_mock_azure_open_ai
+# Monkey patch the method of the StubAzureOpenAI class
+StubAzureOpenAI.chat.completions.create = _new_create_stub_azure_open_ai
 
 
 ############ AzureOpenAI
@@ -89,7 +89,7 @@ def azure_openai_chat_wrapper(
 
         # Calculate emissions
         amount = APIEmissionsTracker.approximate_emissions(model, prompt_tokens, completion_tokens)
-        MockAzureOpenAI.tracker.add_emissions(amount)
+        StubAzureOpenAI.tracker.add_emissions(amount)
 
         return response
 
