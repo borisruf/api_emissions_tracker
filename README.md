@@ -15,7 +15,7 @@ Once the package is installed, you can include and use it in your Python code.
 
 __Sample code:__
 ```python
-from mockai import AzureOpenAI
+from openai import AzureOpenAI
 from api_emissions_tracker import APIEmissionsTracker
 
 AZURE_ENDPOINT = "[YOUR_AZURE_ENDPOINT]"
@@ -40,12 +40,12 @@ __Sample output:__
 emissions: 0.26814 g CO2e
 ```
 
-For demonstration purposes you can also uses the Python library [MockAI](https://github.com/borisruf/mockai/) which mimics the API requests. Simply replace the following lines:
+For demonstration purposes you can also uses the Python library [Stub AI](https://github.com/borisruf/stub_ai/) which mimics the API requests. Simply replace the following lines:
 
 ```python
-from mockai import MockAzureOpenAI
+from stub_ai import StubAzureOpenAI
 ...
-client = MockAzureOpenAI(azure_endpoint=AZURE_ENDPOINT, api_key=OPENAI_API_KEY)
+client = StubAzureOpenAI(azure_endpoint=AZURE_ENDPOINT, api_key=OPENAI_API_KEY)
 ```
 
 The emission factors can be checked, changed and extended in [emission_factors.json](https://github.com/borisruf/mockai/blob/main/emissions_tracker/emission_factors.json).
