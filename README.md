@@ -6,7 +6,7 @@ A Python library that estimates the carbon emissions linked to cloud-based API s
 To install the package, you can use `pip`, the Python package manager. Open a command line or terminal and run the following command:
 
 ```bash
-pip install git+https://github.com/borisruf/api_emissions_tracker.git
+pip install api_emissions_tracker
 ```
 
 ## Usage
