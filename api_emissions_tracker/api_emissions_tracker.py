@@ -1,15 +1,14 @@
 from wrapt import wrap_function_wrapper
-from stub_ai import StubAzureOpenAI
-from openai import AzureOpenAI
-from openai.resources.chat import Completions
 import json
 import warnings
 import os
 
+from .logger import logger
+
+
 class APIEmissionsTracker:
     def __init__(self):
-        StubAzureOpenAI.tracker = self
-        self.emissions = 0.0
+        logger.emissions = 0.0
 
     def start(self):
         # Start tracking emissions
@@ -18,17 +17,17 @@ class APIEmissionsTracker:
     def stop(self):
         # Stop tracking emissions
         if hasattr(self, 'tracking') and self.tracking:  # Check if tracking was started
-            self.log_emission()
+            self.print_emissions()
         self.tracking = False
 
     def add_emissions(self, amount):
         if hasattr(self, 'tracking') and self.tracking:
             self.emissions += amount
 
-    def log_emission(self):
+    def print_emissions(self):
         # Plot the emission value and any relevant details
-        print("emissions:", self.emissions, "g CO2e")
-        print(f"Compare: https://borisruf.github.io/carbon-footprint-modeling-tool/search.html?value={self.emissions}&mass_unit=g&emission_type=co2e")
+        print("emissions:", logger.emissions, "g CO2e")
+        print(f"Compare: https://borisruf.github.io/carbon-footprint-modeling-tool/search.html?value={logger.emissions}&mass_unit=g&emission_type=co2e")
 
     def approximate_emissions(model, prompt_tokens, completion_tokens):
         path = os.path.join(os.path.dirname(__file__), 'emission_factors.json')
@@ -41,78 +40,4 @@ class APIEmissionsTracker:
                 warnings.warn(f"No emission data available for the AI model '{model}'")
                 return 0
 
-############ Stub AI
 
-def _new_create_stub_azure_open_ai(model, messages, temperature=1, max_tokens=16, top_p=1, frequency_penalty=0, presence_penalty=0, stop=None):
-    
-    # Call the original method to keep the old code
-    response = StubAzureOpenAI.chat._original_create(model, messages, temperature, max_tokens, top_p, frequency_penalty, presence_penalty, stop)
-    
-    if response:
-        # Collect meta data
-        model = response.model
-        prompt_tokens = response.usage.prompt_tokens
-        completion_tokens = response.usage.completion_tokens
-
-        # Calculate emissions
-        amount = APIEmissionsTracker.approximate_emissions(model, prompt_tokens, completion_tokens)
-        StubAzureOpenAI.tracker.add_emissions(amount)
-
-        return response
-
-    else:
-        return None
-
-
-# Store the original method
-StubAzureOpenAI.chat._original_create = StubAzureOpenAI.chat.completions.create
-
-# Monkey patch the method of the StubAzureOpenAI class
-StubAzureOpenAI.chat.completions.create = _new_create_stub_azure_open_ai
-
-
-############ AzureOpenAI
-
-def azure_openai_chat_wrapper(
-    wrapped,
-    instance: Completions,
-    args,
-    kwargs
-):
-    response = wrapped(*args, **kwargs)
-    # Add code to run after the create method of OpenAI was executed
-    if response:
-        # Collect meta data
-        model = response.model
-        prompt_tokens = response.usage.prompt_tokens
-        completion_tokens = response.usage.completion_tokens
-
-        # Calculate emissions
-        amount = APIEmissionsTracker.approximate_emissions(model, prompt_tokens, completion_tokens)
-        StubAzureOpenAI.tracker.add_emissions(amount)
-
-        return response
-
-    else:
-        return None
-
-class AzureOpenAIInstrumentor:
-    def __init__(self):
-        self.wrapped_methods = [
-            {
-                "module": "openai.resources.chat.completions",
-                "name": "Completions.create",
-                "wrapper": azure_openai_chat_wrapper,
-            },
-        ]
-
-    def instrument(self):
-        for wrapper in self.wrapped_methods:
-            wrap_function_wrapper(
-                wrapper["module"], wrapper["name"], wrapper["wrapper"]
-            )
-
-
-# instantiating the instrumentor
-instrumentor = AzureOpenAIInstrumentor()
-instrumentor.instrument()
