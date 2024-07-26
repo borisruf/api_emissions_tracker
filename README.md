@@ -37,7 +37,7 @@ tracker.stop()
 __Sample output:__
 ```bash
 [Choice(finish_reason='stop', index=0, logprobs=None, message=ChatCompletionMessage(content='The Olympic Games originated in ancient Greece around the 8th century BCE. They were held in Olympia, a small town in the western region of the Peloponnese. The Games were a religious festival dedicated to the Greek god Zeus and were held every four years. The first recorded Olympic Games took place in 776 BCE, and they continued for nearly 12 centuries until they were abolished in 393 CE by the Christian Byzantine Emperor Theodosius I.', role='assistant', function_call=None, tool_calls=None), content_filter_results={'hate': {'filtered': False, 'severity': 'safe'}, 'self_harm': {'filtered': False, 'severity': 'safe'}, 'sexual': {'filtered': False, 'severity': 'safe'}, 'violence': {'filtered': False, 'severity': 'safe'}})]
-emissions: 0.26814 g CO2e
+Total emissions: 0.26814 g CO2e
 ```
 
 For demonstration purposes you can also uses the Python library [Stub AI](https://github.com/borisruf/stub_ai/) which mimics the API requests. Simply replace the following lines:
@@ -47,6 +47,16 @@ from stub_ai import StubAzureOpenAI
 ...
 client = StubAzureOpenAI(azure_endpoint=AZURE_ENDPOINT, api_key=OPENAI_API_KEY)
 ```
+
+## Logging 
+A log file with more details can be written to the hard disk using the following parameter. By default, this feature is disabled. 
+
+
+```python
+tracker = APIEmissionsTracker(write_log_file=True)
+```
+
+
 
 ## Customization
 The emission factors can be checked, changed and extended in [emission_factors.json](https://github.com/borisruf/api_emissions_tracker/blob/main/api_emissions_tracker/emission_factors.json). They can also get overwritten and enhanced as follows:
