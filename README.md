@@ -48,4 +48,22 @@ from stub_ai import StubAzureOpenAI
 client = StubAzureOpenAI(azure_endpoint=AZURE_ENDPOINT, api_key=OPENAI_API_KEY)
 ```
 
-The emission factors can be checked, changed and extended in [emission_factors.json](https://github.com/borisruf/api_emissions_tracker/blob/main/api_emissions_tracker/emission_factors.json).
+## Customization
+The emission factors can be checked, changed and extended in [emission_factors.json](https://github.com/borisruf/api_emissions_tracker/blob/main/api_emissions_tracker/emission_factors.json). They can also get overwritten and enhanced as follows:
+
+```python
+custom_emission_factors = {
+  "gpt-35-turbo": {
+    "per_completion_token": 0.001,
+    "per_prompt_token": 0.002,
+    "reference_url": "https://my.own.source"
+  },
+  "my-model": {
+    "per_completion_token": 0.00051,
+    "per_prompt_token": 0.00051,
+    "reference_url": "https://my.own.source2"
+  }
+}
+
+tracker = APIEmissionsTracker(emission_factors=custom_emission_factors)
+```
