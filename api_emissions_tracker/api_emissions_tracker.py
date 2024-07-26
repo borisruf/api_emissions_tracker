@@ -1,14 +1,17 @@
 from wrapt import wrap_function_wrapper
-import json
 import warnings
-import os
 
 from .logger import logger
+from .emission_factors import global_emission_factors
 
 
 class APIEmissionsTracker:
-    def __init__(self):
+    def __init__(self, emission_factors=None):
+
         logger.emissions = 0.0
+
+        if emission_factors:
+            global_emission_factors.update(emission_factors)
 
     def start(self):
         # Start tracking emissions
@@ -30,14 +33,11 @@ class APIEmissionsTracker:
         print(f"Compare: https://borisruf.github.io/carbon-footprint-modeling-tool/search.html?value={logger.emissions}&mass_unit=g&emission_type=co2e")
 
     def approximate_emissions(model, prompt_tokens, completion_tokens):
-        path = os.path.join(os.path.dirname(__file__), 'emission_factors.json')
-        with open(path, "r") as file:
-            emission_factors = json.load(file)
-
-            if model in emission_factors:
-                return prompt_tokens*emission_factors[model]['per_prompt_token'] + completion_tokens*emission_factors[model]['per_completion_token']
-            else:
-                warnings.warn(f"No emission data available for the AI model '{model}'")
-                return 0
+        
+        if model in global_emission_factors.data:
+            return prompt_tokens*global_emission_factors.data[model]['per_prompt_token'] + completion_tokens*global_emission_factors.data[model]['per_completion_token']
+        else:
+            warnings.warn(f"No emission data available for the AI model '{model}'")
+            return 0
 
 
