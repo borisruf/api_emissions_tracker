@@ -6,9 +6,9 @@ from .emission_factors import global_emission_factors
 
 
 class APIEmissionsTracker:
-    def __init__(self, emission_factors=None):
+    def __init__(self, emission_factors=None, write_log_file=False):
 
-        logger.emissions = 0.0
+        self.write_log_file = write_log_file
 
         if emission_factors:
             global_emission_factors.update(emission_factors)
@@ -28,9 +28,16 @@ class APIEmissionsTracker:
             self.emissions += amount
 
     def print_emissions(self):
+
+        total_co2e = sum(entry['co2e_in_g'] for entry in logger.records.values())
+
         # Plot the emission value and any relevant details
-        print("emissions:", logger.emissions, "g CO2e")
-        print(f"Compare: https://borisruf.github.io/carbon-footprint-modeling-tool/search.html?value={logger.emissions}&mass_unit=g&emission_type=co2e")
+        print("Total emissions:", total_co2e, "g CO2e")
+        print(f"Compare: https://borisruf.github.io/carbon-footprint-modeling-tool/search.html?value={total_co2e}&mass_unit=g&emission_type=co2e")
+
+        if self.write_log_file:
+            logger.write_log_file()
+        
 
     def approximate_emissions(model, prompt_tokens, completion_tokens):
         
@@ -38,6 +45,6 @@ class APIEmissionsTracker:
             return prompt_tokens*global_emission_factors.data[model]['per_prompt_token'] + completion_tokens*global_emission_factors.data[model]['per_completion_token']
         else:
             warnings.warn(f"No emission data available for the AI model '{model}'")
-            return 0
+            return None
 
 

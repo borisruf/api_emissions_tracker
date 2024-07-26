@@ -18,15 +18,16 @@ def azure_openai_chat_wrapper(
 
     if response:
         # Collect meta data
+        # Collect meta data
         model = response.model
         prompt_tokens = response.usage.prompt_tokens
         completion_tokens = response.usage.completion_tokens
 
         # Calculate emissions
         amount = APIEmissionsTracker.approximate_emissions(model, prompt_tokens, completion_tokens)
-        logger.add_emissions(amount)
-
-        return response
+        
+        record = {"model": model, "prompt_tokens": prompt_tokens, "completion_tokens": completion_tokens, "co2e_in_g": amount}
+        logger.add_record(record)
 
     else:
         return None

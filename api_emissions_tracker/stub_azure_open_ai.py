@@ -19,7 +19,9 @@ def _new_create_stub_azure_open_ai(model, messages, temperature=1, max_tokens=16
 
         # Calculate emissions
         amount = APIEmissionsTracker.approximate_emissions(model, prompt_tokens, completion_tokens)
-        logger.add_emissions(amount)
+        
+        record = {"model": model, "prompt_tokens": prompt_tokens, "completion_tokens": completion_tokens, "co2e_in_g": amount}
+        logger.add_record(record)
 
     return response
 

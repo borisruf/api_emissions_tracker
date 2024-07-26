@@ -10,6 +10,5 @@ class EmissionFactors:
     def update(self, new_factors):
         self.data.update(new_factors)
 
-
 # Create an instance of the GlobalObject
 global_emission_factors = EmissionFactors()
