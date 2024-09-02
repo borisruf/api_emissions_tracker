@@ -6,7 +6,7 @@ setup(
     name='api_emissions_tracker',
     packages=find_packages(),
     package_data={'api_emissions_tracker': ['emission_factors.json']},
-    install_requires=['wrapt', 'importlib'],
+    install_requires=['wrapt'],
     version=VERSION,
     description='Estimates emissions linked to AI cloud services.',
     long_description='A Python library that estimates the carbon emissions linked to cloud-based API services, such as AI cloud services, for demonstration purposes.',
